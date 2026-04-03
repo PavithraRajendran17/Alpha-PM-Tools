@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alpha PM Tool | 100% Progress</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Project Management Tool</h1>
+        
+        <div class="progress-section glass-card">
+            <h3>Overall Progress: <%= percentage %>%</h3>
+            <div class="progress-container">
+               <div class="progress-fill" style="width: <%= percentage + '%' %>;"></div>
+            </div>
+        </div>
+
+        <form action="/add" method="POST" class="glass-card">
+            <input type="text" name="projectName" placeholder="Project Name" required>
+            <textarea name="taskDescription" placeholder="Task Details"></textarea>
+            <button type="submit">Create Project</button>
+        </form>
+
+        <div class="grid">
+            <% if (tasks && tasks.length > 0) { %>
+                <% tasks.forEach(task => { %>
+                    <div class="card glass-card <%= task.isCompleted ? 'task-done' : '' %>">
+                        <div class="card-header">
+                            <form action="/toggle/<%= task._id %>" method="POST">
+                                <button type="submit" class="tick-btn">
+                                    <%= task.isCompleted ? '✅' : '⬜' %>
+                                </button>
+                            </form>
+                        </div>
+                        <h3><%= task.projectName %></h3>
+                        <p><%= task.taskDescription %></p>
+                        <div class="card-footer">
+                            <span class="status-badge"><%= task.isCompleted ? 'Completed' : 'Pending' %></span>
+                            <form action="/delete/<%= task._id %>" method="POST">
+                                <button type="submit" class="done-btn">Remove</button>
+                            </form>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <p style="grid-column: 1 / -1; opacity: 0.5;">No projects found. Add one above!</p>
+            <% } %>
+        </div>
+    </div>
+</body>
+</html>
